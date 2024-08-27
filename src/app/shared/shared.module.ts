@@ -9,28 +9,30 @@ import { PlayListHeaderComponent } from './components/play-list-header/play-list
 import { PlayListBodyComponent } from './components/play-list-body/play-list-body.component';
 import { RouterModule } from '@angular/router';
 import { OrderListPipe } from './pipes/order-list.pipe';
+import { ImgBrokenDirective } from './directives/img-broken/img-broken.directive';
 
 @NgModule({
-  declarations: [
-    SidebarComponent,
-    MediaPlayerComponent,
-    HeaderUserComponent,
-    CardPlayerComponent,
-    SectionGenericComponent,
-    PlayListHeaderComponent,
-    PlayListBodyComponent,
-    OrderListPipe,
-  ],
-  imports: [CommonModule, RouterModule],
-  exports: [
-    SidebarComponent,
-    MediaPlayerComponent,
-    HeaderUserComponent,
-    CardPlayerComponent,
-    SectionGenericComponent,
-    PlayListHeaderComponent,
-    PlayListBodyComponent,
-    OrderListPipe,
-  ],
+    declarations: [
+        SidebarComponent,
+        MediaPlayerComponent,
+        HeaderUserComponent,
+        CardPlayerComponent,
+        SectionGenericComponent,
+        PlayListHeaderComponent,
+        PlayListBodyComponent,
+        OrderListPipe,
+        ImgBrokenDirective,
+    ],
+    imports: [CommonModule, RouterModule],
+    exports: [
+        SidebarComponent,
+        MediaPlayerComponent,
+        HeaderUserComponent,
+        CardPlayerComponent,
+        SectionGenericComponent,
+        PlayListHeaderComponent,
+        PlayListBodyComponent,
+        OrderListPipe,
+    ],
 })
 export class SharedModule {}
