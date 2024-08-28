@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '@modules/auth/services/auth.service';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-auth-page',
@@ -19,10 +19,7 @@ export class AuthPageComponent implements OnInit {
         ]),
     });
 
-    constructor(
-        private authService: AuthService,
-        private cookieService: CookieService
-    ) {}
+    constructor(private authService: AuthService, private router: Router) {}
 
     ngOnInit(): void {}
 
@@ -32,6 +29,7 @@ export class AuthPageComponent implements OnInit {
             const { email, password } = this.formLogin.value;
             this.authService.sendCredencial(email, password).subscribe(
                 (res) => {
+                    this.router.navigate(['/']);
                     this.errorSession = false;
                     this.formLogin.reset();
                 },
