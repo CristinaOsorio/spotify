@@ -24,7 +24,6 @@ export class AuthPageComponent implements OnInit {
     ngOnInit(): void {}
 
     sendLogin() {
-        console.log(this.formLogin.value);
         if (this.formLogin.valid) {
             const { email, password } = this.formLogin.value;
             this.authService.sendCredencial(email, password).subscribe(
