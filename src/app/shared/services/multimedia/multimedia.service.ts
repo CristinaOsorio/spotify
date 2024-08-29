@@ -17,6 +17,7 @@ export class MultimediaService {
     public playerStatus$: BehaviorSubject<string> = new BehaviorSubject(
         'pause'
     );
+    public playerPercentage$: BehaviorSubject<number> = new BehaviorSubject(0);
     public audio!: HTMLAudioElement;
 
     constructor() {
@@ -27,6 +28,15 @@ export class MultimediaService {
                 this.listenAllEvents();
             }
         });
+    }
+
+    public setAudio(track: Tracks) {
+        this.audio.src = track.url;
+        this.audio.play();
+    }
+
+    togglePlayer() {
+        this.audio.paused ? this.audio.play() : this.audio.pause();
     }
 
     private listenAllEvents() {
@@ -40,7 +50,8 @@ export class MultimediaService {
     private calculateTime = () => {
         const { duration, currentTime } = this.audio;
         this.setTimeElapsed(currentTime);
-        this.setTimeRemaining(duration, currentTime);
+        this.setTimeRemaining(currentTime, duration);
+        this.setPercentage(currentTime, duration);
     };
 
     private formatTime(minutes: number, seconds: number): string {
@@ -65,7 +76,7 @@ export class MultimediaService {
         this.timeElapsed$.next(displayFormat);
     }
 
-    private setTimeRemaining(duration: number, currentTime: number): void {
+    private setTimeRemaining(currentTime: number, duration: number): void {
         let timeLeft = Math.max(0, duration - currentTime);
         const { minutes, seconds } = this.calculateTimeComponents(timeLeft);
         const displayFormat = `-${this.formatTime(minutes, seconds)}`;
@@ -93,12 +104,10 @@ export class MultimediaService {
         }
     };
 
-    public setAudio(track: Tracks) {
-        this.audio.src = track.url;
-        this.audio.play();
-    }
+    private setPercentage(currentTime: number, duration: number) {
+        const percentage = (currentTime / duration) * 100;
+        console.log(percentage);
 
-    togglePlayer() {
-        this.audio.paused ? this.audio.play() : this.audio.pause();
+        this.playerPercentage$.next(percentage);
     }
 }
