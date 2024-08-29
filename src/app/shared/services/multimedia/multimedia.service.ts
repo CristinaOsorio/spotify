@@ -35,7 +35,13 @@ export class MultimediaService {
         this.audio.play();
     }
 
-    togglePlayer() {
+    public seekAudio(percentage: number) {
+        const { duration } = this.audio;
+        const percentageToSecond = (percentage / 100) * duration;
+        this.audio.currentTime = percentageToSecond;
+    }
+
+    public togglePlayer() {
         this.audio.paused ? this.audio.play() : this.audio.pause();
     }
 
@@ -84,8 +90,6 @@ export class MultimediaService {
     }
 
     private setPlayingStatus = (status: any) => {
-        console.log({ status });
-
         switch (status.type) {
             case 'play':
                 this.playerStatus$.next('play');
@@ -106,8 +110,6 @@ export class MultimediaService {
 
     private setPercentage(currentTime: number, duration: number) {
         const percentage = (currentTime / duration) * 100;
-        console.log(percentage);
-
         this.playerPercentage$.next(percentage);
     }
 }
