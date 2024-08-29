@@ -26,6 +26,10 @@ body {
   color: var(--color-4);
 }
 
+button {
+  cursor: pointer;
+}
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

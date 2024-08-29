@@ -7,9 +7,16 @@ const SECONDS_IN_MINUTE = 60;
     providedIn: 'root',
 })
 export class MultimediaService {
-    public trackInfo$: BehaviorSubject<any> = new BehaviorSubject(undefined);
-    public timeElapsed$: BehaviorSubject<any> = new BehaviorSubject('00:00');
-    public timeRemaining$: BehaviorSubject<any> = new BehaviorSubject('-00:00');
+    public trackInfo$: BehaviorSubject<Tracks | undefined> =
+        new BehaviorSubject<Tracks | undefined>(undefined);
+
+    public timeElapsed$: BehaviorSubject<string> = new BehaviorSubject('00:00');
+    public timeRemaining$: BehaviorSubject<string> = new BehaviorSubject(
+        '-00:00'
+    );
+    public playerStatus$: BehaviorSubject<string> = new BehaviorSubject(
+        'pause'
+    );
     public audio!: HTMLAudioElement;
 
     constructor() {
@@ -24,6 +31,10 @@ export class MultimediaService {
 
     private listenAllEvents() {
         this.audio.addEventListener('timeupdate', this.calculateTime, false);
+        this.audio.addEventListener('playing', this.setPlayingStatus, false);
+        this.audio.addEventListener('play', this.setPlayingStatus, false);
+        this.audio.addEventListener('pause', this.setPlayingStatus, false);
+        this.audio.addEventListener('ended', this.setPlayingStatus, false);
     }
 
     private calculateTime = () => {
@@ -61,9 +72,33 @@ export class MultimediaService {
         this.timeRemaining$.next(displayFormat);
     }
 
+    private setPlayingStatus = (status: any) => {
+        console.log({ status });
+
+        switch (status.type) {
+            case 'play':
+                this.playerStatus$.next('play');
+                break;
+            case 'playing':
+                this.playerStatus$.next('playing');
+                break;
+            case 'pause':
+                this.playerStatus$.next('pause');
+                break;
+            case 'ended':
+                this.playerStatus$.next('ended');
+                break;
+            default:
+                break;
+        }
+    };
+
     public setAudio(track: Tracks) {
         this.audio.src = track.url;
-        // this.audio.load();
         this.audio.play();
+    }
+
+    togglePlayer() {
+        this.audio.paused ? this.audio.play() : this.audio.pause();
     }
 }
