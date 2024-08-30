@@ -1,31 +1,25 @@
-import { Injectable } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { Tracks } from '@core/models/tracks.model';
-import { BehaviorSubject } from 'rxjs';
 const SECONDS_IN_MINUTE = 60;
 
 @Injectable({
     providedIn: 'root',
 })
 export class MultimediaService {
-    public trackInfo$: BehaviorSubject<Tracks | undefined> =
-        new BehaviorSubject<Tracks | undefined>(undefined);
-
-    public timeElapsed$: BehaviorSubject<string> = new BehaviorSubject('00:00');
-    public timeRemaining$: BehaviorSubject<string> = new BehaviorSubject(
-        '-00:00'
-    );
-    public playerStatus$: BehaviorSubject<string> = new BehaviorSubject(
-        'pause'
-    );
-    public playerPercentage$: BehaviorSubject<number> = new BehaviorSubject(0);
     public audio!: HTMLAudioElement;
+
+    trackInfoSignal = signal<Tracks | undefined>(undefined);
+    timeElapsedSignal = signal<string>('00:00');
+    timeRemainingSignal = signal<string>('-00:00');
+    playerStatusSignal = signal<string>('pause');
+    playerPercentageSignal = signal<number>(0);
 
     constructor() {
         this.audio = new Audio();
-        this.trackInfo$.subscribe((track) => {
-            if (track) {
-                this.setAudio(track);
-                this.listenAllEvents();
+        effect(() => {
+            const dataInfo = this.trackInfoSignal();
+            if (dataInfo) {
+                this.setAudio(dataInfo);
             }
         });
     }
@@ -33,6 +27,7 @@ export class MultimediaService {
     public setAudio(track: Tracks) {
         this.audio.src = track.url;
         this.audio.play();
+        this.listenAllEvents();
     }
 
     public seekAudio(percentage: number) {
@@ -79,29 +74,29 @@ export class MultimediaService {
     private setTimeElapsed(currencyTime: number): void {
         const { minutes, seconds } = this.calculateTimeComponents(currencyTime);
         const displayFormat = this.formatTime(minutes, seconds);
-        this.timeElapsed$.next(displayFormat);
+        this.timeElapsedSignal.set(displayFormat);
     }
 
     private setTimeRemaining(currentTime: number, duration: number): void {
         let timeLeft = Math.max(0, duration - currentTime);
         const { minutes, seconds } = this.calculateTimeComponents(timeLeft);
         const displayFormat = `-${this.formatTime(minutes, seconds)}`;
-        this.timeRemaining$.next(displayFormat);
+        this.timeRemainingSignal.set(displayFormat);
     }
 
     private setPlayingStatus = (status: any) => {
         switch (status.type) {
             case 'play':
-                this.playerStatus$.next('play');
+                this.playerStatusSignal.set('play');
                 break;
             case 'playing':
-                this.playerStatus$.next('playing');
+                this.playerStatusSignal.set('playing');
                 break;
             case 'pause':
-                this.playerStatus$.next('pause');
+                this.playerStatusSignal.set('pause');
                 break;
             case 'ended':
-                this.playerStatus$.next('ended');
+                this.playerStatusSignal.set('ended');
                 break;
             default:
                 break;
@@ -110,6 +105,6 @@ export class MultimediaService {
 
     private setPercentage(currentTime: number, duration: number) {
         const percentage = (currentTime / duration) * 100;
-        this.playerPercentage$.next(percentage);
+        this.playerPercentageSignal.set(percentage);
     }
 }

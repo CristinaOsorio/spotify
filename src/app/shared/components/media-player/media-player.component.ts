@@ -1,40 +1,34 @@
-import { MultimediaService } from './../../services/multimedia/multimedia.service';
 import {
     Component,
+    effect,
     ElementRef,
-    OnDestroy,
-    OnInit,
+    inject,
     ViewChild,
 } from '@angular/core';
-import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ImgBrokenDirective } from '../../directives/img-broken/img-broken.directive';
 import { NgTemplateOutlet, NgIf, NgClass, AsyncPipe } from '@angular/common';
+import { ImgBrokenDirective } from '../../directives/img-broken/img-broken.directive';
+import { MultimediaService } from './../../services/multimedia/multimedia.service';
 
 @Component({
     selector: 'app-media-player',
     templateUrl: './media-player.component.html',
     styleUrls: ['./media-player.component.css'],
     standalone: true,
-    imports: [
-        NgTemplateOutlet,
-        NgIf,
-        ImgBrokenDirective,
-        NgClass,
-        AsyncPipe,
-    ],
+    imports: [NgTemplateOutlet, NgIf, ImgBrokenDirective, NgClass, AsyncPipe],
 })
-export class MediaPlayerComponent implements OnInit, OnDestroy {
+export class MediaPlayerComponent {
     @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('');
-    private destroy$: Subject<boolean> = new Subject<boolean>();
+
     state: string = 'pause';
 
-    constructor(public multimediaService: MultimediaService) {}
+    multimediaService = inject(MultimediaService);
 
-    ngOnInit(): void {
-        this.multimediaService.playerStatus$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((state) => (this.state = state));
+    constructor() {
+        effect(() => {
+            const state = this.multimediaService.playerStatusSignal();
+            this.state = state;
+        });
     }
 
     handlePosition(event: MouseEvent) {
@@ -45,10 +39,5 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
         const percentageFromX = (clickX / width) * 100;
 
         this.multimediaService.seekAudio(percentageFromX);
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next(true);
-        this.destroy$.complete();
     }
 }
