@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@modules/auth/services/auth.service';
 
@@ -11,9 +11,9 @@ import { AuthService } from '@modules/auth/services/auth.service';
 export class AuthPageComponent implements OnInit {
     errorSession = false;
 
-    formLogin = new FormGroup({
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [
+    formLogin = new UntypedFormGroup({
+        email: new UntypedFormControl('', [Validators.required, Validators.email]),
+        password: new UntypedFormControl('', [
             Validators.required,
             Validators.minLength(5),
         ]),
