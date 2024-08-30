@@ -6,7 +6,6 @@ import { TracksPageComponent } from './pages/tracks-page/tracks-page.component';
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
-    declarations: [TracksPageComponent],
-    imports: [CommonModule, TracksRoutingModule, SharedModule],
+    imports: [CommonModule, TracksRoutingModule, SharedModule, TracksPageComponent],
 })
 export class TracksModule {}

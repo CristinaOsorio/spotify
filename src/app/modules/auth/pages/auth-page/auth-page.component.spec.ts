@@ -11,9 +11,8 @@ describe('AuthPageComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [AuthPageComponent],
-            imports: [HttpClientTestingModule, RouterTestingModule],
-        }).compileComponents();
+    imports: [HttpClientTestingModule, RouterTestingModule, AuthPageComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

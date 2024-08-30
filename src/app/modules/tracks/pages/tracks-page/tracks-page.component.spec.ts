@@ -9,9 +9,8 @@ describe('TracksPageComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TracksPageComponent],
-            imports: [HttpClientTestingModule],
-        }).compileComponents();
+    imports: [HttpClientTestingModule, TracksPageComponent],
+}).compileComponents();
     });
 
     beforeEach(() => {

@@ -8,6 +8,7 @@ import {
 
 @Directive({
     selector: 'img[appImgBroken]',
+    standalone: true,
 })
 export class ImgBrokenDirective {
     @Input('defaultImage') defaultImage: string = '';

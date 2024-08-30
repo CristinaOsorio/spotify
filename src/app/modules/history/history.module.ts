@@ -8,7 +8,6 @@ import { SharedModule } from '@shared/shared.module';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-    declarations: [HistoryPageComponent, SearchComponent],
-    imports: [CommonModule, FormsModule, HistoryRoutingModule, SharedModule],
+    imports: [CommonModule, FormsModule, HistoryRoutingModule, SharedModule, HistoryPageComponent, SearchComponent],
 })
 export class HistoryModule {}

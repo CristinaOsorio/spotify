@@ -3,6 +3,7 @@ import { Tracks } from './../../core/models/tracks.model';
 
 @Pipe({
     name: 'orderList',
+    standalone: true,
 })
 export class OrderListPipe implements PipeTransform {
     transform(

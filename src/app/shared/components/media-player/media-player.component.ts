@@ -8,11 +8,21 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ImgBrokenDirective } from '../../directives/img-broken/img-broken.directive';
+import { NgTemplateOutlet, NgIf, NgClass, AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-media-player',
     templateUrl: './media-player.component.html',
     styleUrls: ['./media-player.component.css'],
+    standalone: true,
+    imports: [
+        NgTemplateOutlet,
+        NgIf,
+        ImgBrokenDirective,
+        NgClass,
+        AsyncPipe,
+    ],
 })
 export class MediaPlayerComponent implements OnInit, OnDestroy {
     @ViewChild('progressBar') progressBar: ElementRef = new ElementRef('');
